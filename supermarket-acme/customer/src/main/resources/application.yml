@@ -1,0 +1,31 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: microservice-customer
+  jackson:
+    serialization.write_dates_as_timestamps: false
+
+  zipkin:
+    base-url: http://localhost:9411
+
+  datasource:
+    password: 'postgres'
+    url: jdbc:postgresql://localhost:5432/customer
+    username: 'postgres'
+  flyway:
+    enabled: true
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+    enabled: true
