@@ -1,12 +1,11 @@
 package br.com.fraud.service;
 
-import br.com.fraud.model.FraudEntity;
 import br.com.fraud.repository.FraudRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
+@Log4j2
 public class FraudServiceImpl implements  FraudService{
 
     private final FraudRepository fraudRepository;
@@ -17,13 +16,13 @@ public class FraudServiceImpl implements  FraudService{
 
     @Override
     public boolean isFraud(Long customerId) {
-        var fraud = this.fraudRepository.save(
-                FraudEntity.builder()
-                        .customerId(customerId)
-                        .isFraud(false)
-                        .description("This is not a fraud")
-                        .createAt(LocalDateTime.now())
-                        .build());
-        return fraud.isFraud();
+        try {
+            var fraud = this.fraudRepository.findByCustomerId(customerId);
+            return fraud.isFraud();
+        } catch (Exception e) {
+            log.info("Error finding fraud, reason: " + e.getMessage());
+        }
+
+        return true;
     }
 }

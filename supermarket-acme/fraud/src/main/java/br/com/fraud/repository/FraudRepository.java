@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FraudRepository extends JpaRepository<FraudEntity, Long> {
+
+    public FraudEntity findByCustomerId(Long id);
 }

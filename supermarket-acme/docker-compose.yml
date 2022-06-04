@@ -26,9 +26,23 @@ services:
       - storage
     networks:
       - spring
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ".data/rabbitmq:/var/lib/rabbitmq/data"
+    networks:
+      - rabbitmq_java_net
+
 networks:
   postgres:
     driver: bridge
   spring:
     driver: bridge
     external: false
+  rabbitmq_java_net:
+    driver: bridge

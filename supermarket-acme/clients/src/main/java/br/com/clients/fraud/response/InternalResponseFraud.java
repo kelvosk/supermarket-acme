@@ -1,15 +1,13 @@
-package br.com.fraud.controller.response;
+package br.com.clients.fraud.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class FraudResponse {
+public class InternalResponseFraud {
 
-    private boolean isFraud;
+    private Boolean isFraud;
 }
