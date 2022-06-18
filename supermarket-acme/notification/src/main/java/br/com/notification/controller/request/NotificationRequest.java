@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Builder
 public class NotificationRequest {
 
-    private LocalDateTime sentAt;
-    private Long idCustomer;
+    private String customer_cpf;
     private String message;
     private String sender;
-    private String customer_mail;
+    private String customer_email;
+    private Boolean fraud;
 }

@@ -5,6 +5,7 @@ import br.com.notification.controller.response.NotificationResponse;
 import br.com.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/notifications")
+@Tag(name = "Notification API")
 public class NotificationController {
 
     private NotificationService notificationService;

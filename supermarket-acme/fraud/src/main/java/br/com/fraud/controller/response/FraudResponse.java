@@ -11,5 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FraudResponse {
 
-    private boolean isFraud;
+    private boolean fraud;
+
+    private String cpf;
+
+    private String customerName;
 }

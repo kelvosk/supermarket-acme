@@ -22,17 +22,14 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
-
     @Operation(summary = "create customer", description = "create customer to fraud system")
     @ApiResponse(responseCode = "201", description = "Customer success created")
     @PostMapping
-    public ResponseEntity<CustomerResponse> createCustomer(@RequestBody CustomerRequest customerRequest) {
+    public ResponseEntity<String> createCustomer(@RequestBody CustomerRequest customerRequest) {
         log.info("calling controller to create customer {}", customerRequest );
-        this.customerService.createCustomer(customerRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.ok(this.customerService.createCustomer(customerRequest));
     }
 }

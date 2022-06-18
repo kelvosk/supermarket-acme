@@ -9,5 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InternalResponseFraud {
 
-    private Boolean isFraud;
+    private Boolean fraud;
+
+    private String cpf;
+
+    private String customerName;
 }

@@ -15,9 +15,7 @@ public class FraudRequest {
 
     private String description;
 
-    private Long customerId;
+    private String customerCpf;
 
-    private boolean isFraud;
-
-    private LocalDateTime createAt;
+    private String customerName;
 }

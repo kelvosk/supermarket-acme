@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Table(name = "tb_customer")
 public class CustomerEntity {
 
-
     @Id
     @SequenceGenerator(
             name = "customer_id_sequence",
@@ -26,6 +25,12 @@ public class CustomerEntity {
     )
     private Long id;
 
-    private String name;
-    private String email;
+    @Column(name = "customer_name")
+    private String customer_name;
+
+    @Column(name = "customer_email")
+    private String customerEmail;
+
+    @Column(name = "customer_cpf")
+    private String customerCpf;
 }

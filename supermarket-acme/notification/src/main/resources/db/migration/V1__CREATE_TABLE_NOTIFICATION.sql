@@ -1,8 +1,9 @@
 CREATE TABLE tb_notification (
     id serial PRIMARY KEY,
+    customer_cpf VARCHAR (20),
     sent_at TIMESTAMP,
-    id_customer NUMERIC,
+    fraud BOOLEAN,
     message VARCHAR(200),
     sender VARCHAR(200),
-    customer_mail VARCHAR(200)
+    customer_email VARCHAR(200)
 );

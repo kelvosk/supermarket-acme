@@ -1,28 +1,32 @@
 package br.com.fraud.service;
 
+import br.com.fraud.config.ConvertUtils;
+import br.com.fraud.controller.request.FraudRequest;
+import br.com.fraud.model.FraudEntity;
 import br.com.fraud.repository.FraudRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
 @Log4j2
-public class FraudServiceImpl implements  FraudService{
+public class FraudServiceImpl implements  FraudService {
 
     private final FraudRepository fraudRepository;
+    private final ConvertUtils convertUtils;
 
-    public FraudServiceImpl(FraudRepository fraudRepository) {
+    public FraudServiceImpl(FraudRepository fraudRepository, ConvertUtils convertUtils) {
         this.fraudRepository = fraudRepository;
+        this.convertUtils = convertUtils;
     }
 
     @Override
-    public boolean isFraud(Long customerId) {
-        try {
-            var fraud = this.fraudRepository.findByCustomerId(customerId);
-            return fraud.isFraud();
-        } catch (Exception e) {
-            log.info("Error finding fraud, reason: " + e.getMessage());
-        }
+    public FraudEntity isFraud(String cpf) {
+        return this.fraudRepository.getFraudEntitiesByCustomerCpf(cpf);
+    }
 
-        return true;
+    @Override
+    public FraudEntity registeredFraud(FraudRequest fraudRequest) {
+        return this.fraudRepository.save((FraudEntity)
+                this.convertUtils.convertRequestToEntity(fraudRequest, FraudEntity.class));
     }
 }

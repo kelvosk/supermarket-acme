@@ -1,6 +1,5 @@
 package br.com.customer.service;
 
-
 import br.com.clients.fraud.request.NotificationPayload;
 import br.com.clients.fraud.response.InternalResponseFraud;
 import br.com.clients.fraud.service.ClientFraudService;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class CustomerServiceImpl implements  CustomerService{
+public class CustomerServiceImpl implements  CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ConvertUtils convertUtils;
@@ -30,35 +29,42 @@ public class CustomerServiceImpl implements  CustomerService{
     }
 
     @Override
-    public CustomerResponse createCustomer(CustomerRequest customerRequest) {
-        log.info("Calling the method to create customer {}", customerRequest);
-        var customerEntity =
-                (CustomerEntity) this.convertUtils.convertRequestToEntity(customerRequest, CustomerEntity.class);
+    public String createCustomer(CustomerRequest customerRequest) {
 
-        var entity = this.customerRepository.save(customerEntity);
+        var internalResponseFraud = this.clientFraudService.isFraud(customerRequest.getCpf());
 
-        checkFraud(entity);
+        if (internalResponseFraud != null && internalResponseFraud.getFraud()) {
 
-        // send message to queue
-        var notificationPayload = NotificationPayload
-                .builder()
-                .customer_email(entity.getEmail())
-                .sender(entity.getName())
-                .idCustomer(entity.getId())
-                .message("Message sent to queue")
-                .build();
+            log.info(String.format("This document %s to this customer is one fraud ", customerRequest.getCpf()));
 
-        this.rabbitMQMessageProducer.publish(
-                notificationPayload,
-                "internal.exchange",
-                "internal.notification.routing-key"
-        );
+            // send message to queue
+            var notificationPayload = NotificationPayload
+                    .builder()
+                    .customer_email(customerRequest.getEmail())
+                    .sender(customerRequest.getCustomer_name())
+                    .customer_cpf(customerRequest.getCpf())
+                    .message("Client:" + internalResponseFraud.getCustomerName() + "with CPF:" + internalResponseFraud.getCpf() + "is a fraud")
+                    .build();
 
-        return (CustomerResponse) this.convertUtils.convertEntityToResponse(entity, CustomerResponse.class);
-    }
+            this.rabbitMQMessageProducer.publish(
+                    notificationPayload,
+                    "internal.exchange",
+                    "internal.notification.routing-key"
+            );
 
-    private InternalResponseFraud checkFraud(CustomerEntity entity){
-        log.info("Calling fraud service using customerId {} ", entity.getId());
-        return clientFraudService.isFraud(entity.getId());
+            return ("The customer: " + internalResponseFraud.getCustomerName() + " is a fraud, cpf :" + internalResponseFraud.getCpf());
+
+        } else {
+            log.info("Calling the method to create customer {}", customerRequest);
+            var customerEntity =
+                    (CustomerEntity) this.convertUtils.convertRequestToEntity(customerRequest, CustomerEntity.class);
+
+            var entity = this.customerRepository.save(customerEntity);
+            log.info(String.format("calling fraud service to customerId {}", entity.getCustomerCpf()));
+
+            this.convertUtils.convertEntityToResponse(entity, CustomerResponse.class);
+
+            return "Customer created with success";
+        }
     }
 }

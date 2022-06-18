@@ -5,5 +5,5 @@ import br.com.customer.controller.response.CustomerResponse;
 
 public interface CustomerService {
 
-    CustomerResponse createCustomer(CustomerRequest customerRequest);
+    String createCustomer(CustomerRequest customerRequest);
 }

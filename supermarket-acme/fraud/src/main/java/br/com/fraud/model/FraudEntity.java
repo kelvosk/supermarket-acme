@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 @Table (name = "tb_fraud")
 public class FraudEntity {
 
+    public FraudEntity(Boolean fraud){
+        this.isFraud = fraud;
+    }
+
     @Id
     @SequenceGenerator (
             name = "fraud_id_sequence",
@@ -28,9 +32,12 @@ public class FraudEntity {
 
     private String description;
 
-    private Long customerId;
+    private String customerCpf;
 
-    private boolean isFraud;
+    @Column(name = "customer_name")
+    private String customerName;
 
-    private LocalDateTime createAt;
+    private boolean isFraud = true;
+
+    private LocalDateTime createAt = LocalDateTime.now();
 }
